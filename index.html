@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Farmers Market - Direct to You</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        nav .logo img {
+            width: 50px;
+            height: 50px;
+            object-fit: contain;
+        }
+
+        nav .nav-links a {
+            color: white;
+            text-decoration: none;
+            margin-left: 20px;
+            font-size: 16px;
+            transition: color 0.3s ease;
+        }
+
+        nav .nav-links a:hover {
+            color: #e0e0e0;
+        }
+
+        .login-form {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.7);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .login-form .form-content {
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            text-align: center;
+            position: relative;
+            width: 90%;
+            max-width: 400px;
+        }
+
+        .login-form input {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        .login-form button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        .login-form button:hover {
+            background-color: #45a049;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            cursor: pointer;
+            font-size: 24px;
+            color: #666;
+        }
+
+        .search-section {
+            margin: 20px auto;
+            text-align: center;
+            max-width: 1200px;
+            padding: 0 20px;
+        }
+
+        #search-bar {
+            padding: 12px;
+            width: 100%;
+            max-width: 600px;
+            border-radius: 25px;
+            border: 1px solid #ddd;
+            font-size: 16px;
+            transition: box-shadow 0.3s ease;
+        }
+
+        #search-bar:focus {
+            outline: none;
+            box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
+        }
+
+        .product-section {
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .product-section h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #333;
+            font-size: 28px;
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 25px;
+            padding: 20px;
+        }
+
+        .product-card {
+            background-color: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+        }
+
+        .product-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .product-card:hover img {
+            transform: scale(1.05);
+        }
+
+        .product-info {
+            padding: 15px;
+        }
+
+        .product-card h3 {
+            font-size: 18px;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .product-card .price {
+            font-size: 16px;
+            color: #4CAF50;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .product-card .health-benefits {
+            font-size: 14px;
+            color: #666;
+            font-style: italic;
+            line-height: 1.4;
+        }
+
+        footer {
+            background-color: #4CAF50;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin-top: 50px;
+        }
+
+        @media (max-width: 768px) {
+            .product-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 15px;
+                padding: 15px;
+            }
+            
+            nav .nav-links a {
+                margin-left: 10px;
+                font-size: 14px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .product-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            #search-bar {
+                width: 90%;
+            }
+            
+            .product-section h2 {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <img src="https://cdn-icons-png.flaticon.com/512/2153/2153788.png" alt="Farmers Market Logo">
+            </div>
+            <div class="nav-links">
+                <a href="#products">Shop</a>
+                <a href="#categories">Categories</a>
+                <a href="#about">About</a>
+                <a href="#contact">Contact</a>
+                <a href="#login" onclick="toggleLoginForm()">Login / Sign Up</a>
+            </div>
+        </nav>
+    </header>
+
+    <div class="login-form" id="login-form">
+        <div class="form-content">
+            <span class="close-btn" onclick="toggleLoginForm()">×</span>
+            <h2>Login / Sign Up</h2>
+            <form id="auth-form" onsubmit="return false;">
+                <input type="email" placeholder="Email" id="email" required>
+                <input type="password" placeholder="Password" id="password" required>
+                <button type="submit">Login</button>
+                <p>Don't have an account? <a href="#" onclick="toggleForm()">Sign Up</a></p>
+            </form>
+        </div>
+    </div>
+
+    <section class="search-section">
+        <input type="text" id="search-bar" placeholder="Search for fresh products..." oninput="searchProducts()">
+    </section>
+
+    <section id="products" class="product-section">
+        <h2>Fresh From the Farm</h2>
+        <div class="product-grid" id="product-grid">
+            <!-- Products will be inserted here dynamically -->
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2024 Farmers Market - Direct to You | Fresh • Local • Sustainable</p>
+    </footer>
+
+    <script>
+        const products = [
+            {
+                name: 'Fresh Apples',
+                price: '$3.99/kg',
+                image: 'https://cdn.pixabay.com/photo/2016/01/05/13/58/apple-1122537_1280.jpg',
+                healthBenefits: 'Rich in antioxidants and vitamins.'
+            },
+            {
+                name: 'Organic Carrots',
+                price: '$2.49/bunch',
+                image: 'https://tse3.mm.bing.net/th?id=OIP.gzn7FEvzXeeVuPQ4KMvKUwHaE8&pid=Api&P=0&h=180',
+                healthBenefits: 'Good for vision and skin health.'
+            },
+            {
+                name: 'Fresh Spinach',
+                price: '$3.99/bunch',
+                image: 'https://tse4.mm.bing.net/th?id=OIP.RlaeVOTjyMw7ZxBAQ2YU5wHaEL&pid=Api&P=0&h=180',
+                healthBenefits: 'High in iron and vitamins A, C, and K.'
+            },
+            {
+                name: 'Red Tomatoes',
+                price: '$2.99/kg',
+                image: 'https://cdn.pixabay.com/photo/2016/03/26/16/44/tomatoes-1280859_1280.jpg',
+                healthBenefits: 'Rich in lycopene, good for heart health.'
+            },
+            {
+                name: 'Sweet Potatoes',
+                price: '$1.99/kg',
+                image: 'https://tse1.mm.bing.net/th?id=OIP.ThY0XK4aDYYNjq19qU9FeAHaE7&pid=Api&P=0&h=180',
+                healthBenefits: 'Rich in fiber and beta-carotene.'
+            },
+            {
+                name: 'Fresh Onions',
+                price: '$1.49/kg',
+                image: 'https://cdn.pixabay.com/photo/2016/05/16/22/47/onions-1397037_1280.jpg',
+                healthBenefits: 'Rich in antioxidants and anti-inflammatory compounds.'
+            },
+            {
+                name: 'Bell Peppers',
+                price: '$4.99/kg',
+                image: 'https://cdn.pixabay.com/photo/2014/08/18/23/11/bell-peppers-421087_1280.jpg',
+                healthBenefits: 'High in vitamin C and antioxidants.'
+            },
+            {
+                name: 'Green Beans',
+                price: '$3.49/kg',
+                image: 'https://tse1.mm.bing.net/th?id=OIP.T3lW-GuU2Ayyt3Ko1JaGagHaE9&pid=Api&P=0&h=180',
+                healthBenefits: 'Good source of fiber and vitamins.'
+            }
+        ];
+
+        function handleImageError(img) {
+            img.onerror = null;
+            img.src = 'https://cdn.pixabay.com/photo/2016/01/03/11/24/gear-1119298_1280.jpg';
+        }
+
+        function renderProducts(filteredProducts = products) {
+            const productGrid = document.getElementById('product-grid');
+            productGrid.innerHTML = '';
+
+            filteredProducts.forEach(product => {
+                const productCard = document.createElement('div');
+                productCard.classList.add('product-card');
+                
+                productCard.innerHTML = `
+                    <img src="${product.image}" 
+                         alt="${product.name}" 
+                         onerror="handleImageError(this)">
+                    <div class="product-info">
+                        <h3>${product.name}</h3>
+                        <p class="price">${product.price}</p>
+                        <p class="health-benefits">${product.healthBenefits}</p>
+                    </div>
+                `;
+                
+                productGrid.appendChild(productCard);
+            });
+        }
+
+        function searchProducts() {
+            const searchValue = document.getElementById('search-bar').value.toLowerCase();
+            const filteredProducts = products.filter(product => 
+                product.name.toLowerCase().includes(searchValue)
+            );
+            renderProducts(filteredProducts);
+        }
+
+        function toggleLoginForm() {
+            const loginForm = document.getElementById('login-form');
+            loginForm.style.display = loginForm.style.display === 'flex' ? 'none' : 'flex';
+        }
+
+        function toggleForm() {
+            const form = document.getElementById('auth-form');
+            const button = form.querySelector('button');
+            const isSignUp = button.innerText === 'Sign Up';
+            button.innerText = isSignUp ? 'Login' : 'Sign Up';
+            form.querySelector('p').innerHTML = isSignUp ? 
+                "Already have an account? <a href='#' onclick='toggleForm()'>Login</a>" : 
+                "Don't have an account? <a href='#' onclick='toggleForm()'>Sign Up</a>";
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderProducts();
+        });
+    </script>
+</body>
+</html>
